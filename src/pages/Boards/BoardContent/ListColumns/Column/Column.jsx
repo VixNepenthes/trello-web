@@ -19,8 +19,14 @@ import Button from '@mui/material/Button'
 
 import { useState } from 'react'
 import ListCards from './ListCards/ListCards'
+import { mapOder } from '~/utils/sorts'
 
-function Column() {
+function Column({ column }) {
+  const orderedCards = mapOder(
+    column?.cards,
+    column?.cardOrderIds,
+    '_id'
+  )
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -36,17 +42,23 @@ function Column() {
         minWidth: '300px',
         maxWidth: '300px',
         bgcolor: (theme) => {
-          return theme.palette.mode === 'dark' ? '#333643' : '#ebecf0'
+          return theme.palette.mode === 'dark'
+            ? '#333643'
+            : '#ebecf0'
         },
         ml: 2,
         borderRadius: '6px',
         height: 'fit-content',
-        maxHeight: (theme) => `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`
+        maxHeight: (theme) =>
+          `calc(${
+            theme.trello.boardContentHeight
+          } - ${theme.spacing(5)})`
       }}>
       {/* Column Header */}
       <Box
         sx={{
-          height: (theme) => theme.trello.columnHeaderHeight,
+          height: (theme) =>
+            theme.trello.columnHeaderHeight,
           p: 2,
           display: 'flex',
           alignItems: 'center',
@@ -59,14 +71,21 @@ function Column() {
             fontWeight: 'bold',
             cursor: 'pointer'
           }}>
-          Column Title
+          {column?.title}
         </Typography>
         <Box>
           <Tooltip title="More Options">
             <ExpandMore
-              sx={{ color: 'text.primary', cursor: 'pointer' }}
+              sx={{
+                color: 'text.primary',
+                cursor: 'pointer'
+              }}
               id="basic-column-dropdown"
-              aria-controls={open ? 'basic-menu-column-dropdown' : undefined}
+              aria-controls={
+                open
+                  ? 'basic-menu-column-dropdown'
+                  : undefined
+              }
               aria-haspopup="true"
               aria-expanded={open ? 'true' : undefined}
               onClick={handleClick}
@@ -109,30 +128,37 @@ function Column() {
               <ListItemIcon>
                 <DeleteForever fontSize="small" />
               </ListItemIcon>
-              <ListItemText>Remove this column</ListItemText>
+              <ListItemText>
+                Remove this column
+              </ListItemText>
             </MenuItem>
             <MenuItem>
               <ListItemIcon>
                 <Cloud fontSize="small" />
               </ListItemIcon>
-              <ListItemText>Archive this column</ListItemText>
+              <ListItemText>
+                Archive this column
+              </ListItemText>
             </MenuItem>
           </Menu>
         </Box>
       </Box>
       {/* Column Content */}
-      <ListCards />
+      <ListCards cards={orderedCards} />
 
       {/* Column Footer */}
       <Box
         sx={{
-          height: (theme) => theme.trello.columnFooterHeight,
+          height: (theme) =>
+            theme.trello.columnFooterHeight,
           p: 2,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between'
         }}>
-        <Button startIcon={<AddCard />}>Add new Card</Button>
+        <Button startIcon={<AddCard />}>
+          Add new Card
+        </Button>
         <Tooltip title="Drag to move">
           <DragHandle sx={{ cursor: 'pointer' }} />
         </Tooltip>

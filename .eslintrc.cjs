@@ -44,5 +44,5 @@ module.exports = {
     'comma-spacing': 1,
     'arrow-spacing': 1
   }
-};
-1;
+}
+1

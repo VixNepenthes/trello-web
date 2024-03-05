@@ -13,7 +13,7 @@ import Chip from '@mui/material/Chip'
 import Tooltip from '@mui/material/Tooltip'
 
 import avatar from '~/assets/270236317_2954352121449240_2744543041549082339_n-modified.png'
-
+import { capitalizeFirstLetter } from '~/utils/formatters'
 const MENU_STYLE = {
   color: 'white',
   bgcolor: 'transparent',
@@ -28,7 +28,8 @@ const MENU_STYLE = {
   // },
 }
 
-function BoardBar() {
+function BoardBar(props) {
+  const { board } = props
   return (
     <Box
       sx={{
@@ -43,21 +44,62 @@ function BoardBar() {
         gap: 2,
         overflowX: 'auto',
         bgcolor: (theme) => {
-          return theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'
+          return theme.palette.mode === 'dark'
+            ? '#34495e'
+            : '#1976d2'
         }
       }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <Chip sx={MENU_STYLE} icon={<Dashboard />} label="Vĩ Dev" clickable />
-        <Chip sx={MENU_STYLE} icon={<VpnLock />} label="Public/Private Workspace" clickable />
-        <Chip sx={MENU_STYLE} icon={<AddToDrive />} label="Add to Google Drive" clickable />
-        <Chip sx={MENU_STYLE} icon={<Bolt />} label="Automation" clickable />
-        <Chip sx={MENU_STYLE} icon={<FilterList />} label="Filter" clickable />
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2
+        }}>
+        <Chip
+          sx={MENU_STYLE}
+          icon={<Dashboard />}
+          label={board?.title}
+          clickable
+        />
+        <Chip
+          sx={MENU_STYLE}
+          icon={<VpnLock />}
+          label={capitalizeFirstLetter(board?.type)}
+          clickable
+        />
+        <Chip
+          sx={MENU_STYLE}
+          icon={<AddToDrive />}
+          label="Add to Google Drive"
+          clickable
+        />
+        <Chip
+          sx={MENU_STYLE}
+          icon={<Bolt />}
+          label="Automation"
+          clickable
+        />
+        <Chip
+          sx={MENU_STYLE}
+          icon={<FilterList />}
+          label="Filter"
+          clickable
+        />
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2
+        }}>
         <Button
           variant="outlined"
           startIcon={<PersonAdd />}
-          sx={{ color: 'white', borderColor: 'white', '&:hover': { borderColor: 'white' } }}>
+          sx={{
+            color: 'white',
+            borderColor: 'white',
+            '&:hover': { borderColor: 'white' }
+          }}>
           Invite
         </Button>
 
