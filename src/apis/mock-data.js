@@ -10,11 +10,7 @@ export const mockData = {
     type: 'public', // 'private'
     ownerIds: [], // Những users là Admin của board
     memberIds: [], // Những users là member bình thường của board
-    columnOrderIds: [
-      'column-id-01',
-      'column-id-02',
-      'column-id-03'
-    ], // Thứ tự sắp xếp / vị trí của các Columns trong 1 boards
+    columnOrderIds: ['column-id-01', 'column-id-02', 'column-id-03', 'column-id-04'], // Thứ tự sắp xếp / vị trí của các Columns trong 1 boards
     columns: [
       {
         _id: 'column-id-01',
@@ -35,20 +31,12 @@ export const mockData = {
             boardId: 'board-id-01',
             columnId: 'column-id-01',
             title: 'Title of card 01',
-            description:
-              'Markdown Syntax (sẽ ở khóa nâng cao nhé)',
+            description: 'Markdown Syntax (sẽ ở khóa nâng cao nhé)',
             cover:
               'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
             memberIds: ['test-user-id-01'],
-            comments: [
-              'test comment 01',
-              'test comment 02'
-            ],
-            attachments: [
-              'test attachment 01',
-              'test attachment 02',
-              'test attachment 03'
-            ]
+            comments: ['test comment 01', 'test comment 02'],
+            attachments: ['test attachment 01', 'test attachment 02', 'test attachment 03']
           },
           {
             _id: 'card-id-02',
@@ -122,11 +110,7 @@ export const mockData = {
         _id: 'column-id-02',
         boardId: 'board-id-01',
         title: 'Inprogress Column 02',
-        cardOrderIds: [
-          'card-id-08',
-          'card-id-09',
-          'card-id-10'
-        ],
+        cardOrderIds: ['card-id-08', 'card-id-09', 'card-id-10'],
         cards: [
           {
             _id: 'card-id-08',
@@ -167,11 +151,7 @@ export const mockData = {
         _id: 'column-id-03',
         boardId: 'board-id-01',
         title: 'Done Column 03',
-        cardOrderIds: [
-          'card-id-11',
-          'card-id-12',
-          'card-id-13'
-        ],
+        cardOrderIds: ['card-id-11', 'card-id-12', 'card-id-13'],
         cards: [
           {
             _id: 'card-id-11',
@@ -205,6 +185,20 @@ export const mockData = {
             memberIds: [],
             comments: [],
             attachments: []
+          }
+        ]
+      },
+      {
+        __id: 'column-id-04',
+        boardId: 'board-id-01',
+        title: 'Empty Column 04',
+        cardOrderIds: ['card-id-04-placeholder-card'],
+        cards: [
+          {
+            _id: 'card-id-04-placeholder-card',
+            boardId: 'board-id-01',
+            columnId: 'column-id-04',
+            FE_PlaceholderCard: true
           }
         ]
       }
