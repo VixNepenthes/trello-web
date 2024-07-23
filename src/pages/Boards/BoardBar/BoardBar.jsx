@@ -44,9 +44,7 @@ function BoardBar(props) {
         gap: 2,
         overflowX: 'auto',
         bgcolor: (theme) => {
-          return theme.palette.mode === 'dark'
-            ? '#34495e'
-            : '#1976d2'
+          return theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'
         }
       }}>
       <Box
@@ -55,36 +53,18 @@ function BoardBar(props) {
           alignItems: 'center',
           gap: 2
         }}>
-        <Chip
-          sx={MENU_STYLE}
-          icon={<Dashboard />}
-          label={board?.title}
-          clickable
-        />
+        <Tooltip title={board?.description}>
+          <Chip sx={MENU_STYLE} icon={<Dashboard />} label={board?.title} clickable />
+        </Tooltip>
         <Chip
           sx={MENU_STYLE}
           icon={<VpnLock />}
           label={capitalizeFirstLetter(board?.type)}
           clickable
         />
-        <Chip
-          sx={MENU_STYLE}
-          icon={<AddToDrive />}
-          label="Add to Google Drive"
-          clickable
-        />
-        <Chip
-          sx={MENU_STYLE}
-          icon={<Bolt />}
-          label="Automation"
-          clickable
-        />
-        <Chip
-          sx={MENU_STYLE}
-          icon={<FilterList />}
-          label="Filter"
-          clickable
-        />
+        <Chip sx={MENU_STYLE} icon={<AddToDrive />} label="Add to Google Drive" clickable />
+        <Chip sx={MENU_STYLE} icon={<Bolt />} label="Automation" clickable />
+        <Chip sx={MENU_STYLE} icon={<FilterList />} label="Filter" clickable />
       </Box>
       <Box
         sx={{
