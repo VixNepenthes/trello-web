@@ -1,4 +1,6 @@
 /* eslint-disable no-console */
+import { useState } from 'react'
+import { toast } from 'react-toastify'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 
@@ -8,19 +10,27 @@ import TextField from '@mui/material/TextField'
 import Close from '@mui/icons-material/Close'
 
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
-import { useState } from 'react'
 // import theme from '~/theme'
-function ListColumns({ columns }) {
+function ListColumns({ columns, createNewColumn, createNewCard }) {
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
   const toggleOpenNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
 
   const [newColumnTitle, setNewColumnTitle] = useState('')
 
-  const addNewColumn = () => {
+  const addNewColumn = async () => {
     if (!newColumnTitle) {
-      console.error('Please enter Column Title')
+      toast.error('Please enter Column Title')
       return
     }
+
+    // Tạo dữ liệu column để gọi API
+    const newColumnData = {
+      title: newColumnTitle
+    }
+
+    // advance: using redux to bring data Board out to redux global store
+
+    await createNewColumn(newColumnData)
 
     toggleOpenNewColumnForm()
     setNewColumnTitle('')
@@ -41,7 +51,7 @@ function ListColumns({ columns }) {
           }
         }}>
         {columns?.map((column) => (
-          <Column column={column} key={column._id} />
+          <Column column={column} key={column._id} createNewCard={createNewCard} />
         ))}
         {/* Column 1 */}
         {/* <Column /> */}

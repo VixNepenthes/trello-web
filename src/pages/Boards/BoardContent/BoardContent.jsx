@@ -4,9 +4,9 @@ import { mapOder } from '~/utils/sorts'
 import {
   DndContext,
   DragOverlay,
-  MouseSensor,
+  // MouseSensor,
   PointerSensor,
-  TouchSensor,
+  // TouchSensor,
   defaultDropAnimationSideEffects,
   useSensor,
   useSensors,
@@ -16,6 +16,8 @@ import {
   getFirstCollision,
   closestCenter
 } from '@dnd-kit/core'
+
+import { MouseSensor, TouchSensor } from '~/customLibraries/DndKitSensor'
 import { arrayMove } from '@dnd-kit/sortable'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { cloneDeep, isEmpty } from 'lodash'
@@ -27,8 +29,7 @@ const ACTIVE_DRAP_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAP_ITEM_TYPE_CARD'
 }
 
-function BoardContent(props) {
-  const { board } = props
+function BoardContent({ board, createNewColumn, createNewCard }) {
   // https://docs.dndkit.com/api-documentation/sensors
   // Yêu cầu chuột di chuyển 10px mới kích hoạt event kéo thả
   const pointerSensor = useSensor(PointerSensor, {
@@ -342,7 +343,11 @@ function BoardContent(props) {
           },
           p: '10px 0'
         }}>
-        <ListColumns columns={orderedColumns} />
+        <ListColumns
+          columns={orderedColumns}
+          createNewCard={createNewCard}
+          createNewColumn={createNewColumn}
+        />
         <DragOverlay dropAnimation={customDropAnimation}>
           {(!activeDragItemId || !activeDragItemType) && null}
           {activeDragItemId && activeDragItemType === ACTIVE_DRAP_ITEM_TYPE.COLUMN && (
