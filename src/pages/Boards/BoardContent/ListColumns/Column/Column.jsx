@@ -24,7 +24,8 @@ import ListCards from './ListCards/ListCards'
 import { mapOder } from '~/utils/sorts'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-function Column({ column }) {
+import { toast } from 'react-toastify'
+function Column({ column, createNewCard }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column?._id,
     data: { ...column }
@@ -49,11 +50,20 @@ function Column({ column }) {
 
   const [newCardTitle, setNewCardTitle] = useState('')
 
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!newCardTitle) {
-      console.error('Please enter Card Title')
-      return
+      toast.error('Please enter Card title', { position: 'bottom-right' })
     }
+
+    const newCardData = {
+      title: newCardTitle,
+      columnId: column._id
+    }
+    // Gọi lên prop function createNewCard nằm ở component mẹ cao nhất
+    // Sau này sẽ sử dụng redux global store để đưa dữ liệu board ra ngoài và có thể gọi trực tiếp
+    // api
+
+    await createNewCard(newCardData)
 
     toggleOpenNewCardForm()
     setNewCardTitle('')
@@ -204,7 +214,7 @@ function Column({ column }) {
                   height: 'fit-content',
                   bgcolor: '#ffffff3d',
                   display: 'flex',
-                  flexDirection: 'column',
+                  flexDirection: 'row',
                   gap: 1
                 }}>
                 <TextField
@@ -213,6 +223,7 @@ function Column({ column }) {
                   size="small"
                   variant="outlined"
                   autoFocus
+                  data-no-dnd="true"
                   value={newCardTitle}
                   onChange={(e) => setNewCardTitle(e.target.value)}
                   sx={{
