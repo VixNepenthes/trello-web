@@ -21,11 +21,11 @@ import Close from '@mui/icons-material/Close'
 
 import { useState } from 'react'
 import ListCards from './ListCards/ListCards'
-import { mapOder } from '~/utils/sorts'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { toast } from 'react-toastify'
-function Column({ column, createNewCard }) {
+import { useConfirm } from 'material-ui-confirm'
+function Column({ column, createNewCard, deleteColumnDetails }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column?._id,
     data: { ...column }
@@ -43,7 +43,8 @@ function Column({ column, createNewCard }) {
     height: '100%',
     opacity: isDragging ? 0.5 : undefined
   }
-  const orderedCards = mapOder(column?.cards, column?.cardOrderIds, '_id')
+  // Cards đã được sắp xếp ở comp mẹ cao nhất
+  const orderedCards = column.cards
 
   const [openNewCardForm, setOpenNewCardForm] = useState(false)
   const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
@@ -63,11 +64,40 @@ function Column({ column, createNewCard }) {
     // Sau này sẽ sử dụng redux global store để đưa dữ liệu board ra ngoài và có thể gọi trực tiếp
     // api
 
-    await createNewCard(newCardData)
+    createNewCard(newCardData)
 
     toggleOpenNewCardForm()
     setNewCardTitle('')
   }
+
+  const confirmDeleteColumn = useConfirm()
+  const handleDeleteColumn = () => {
+    confirmDeleteColumn({
+      title: 'Delete column',
+      description: 'This action will permanently delete your column and its cards. Confirm ?',
+      confirmationText: 'Confirm',
+      cancellationText: 'Cancel'
+
+      // allowClose: false,
+      // dialogProps: {
+      //   maxWidth: 'xs'
+      // },
+      // confirmationButtonProps: {
+      //   color: 'secondary',
+      //   variant: 'outlined'
+      // },
+      // cancellationButtonProps: {
+      //   color: 'inherit'
+      // },
+      // confirmationKeyword: 'videv'
+    })
+      .then(() => {
+        //advance: redux
+        deleteColumnDetails(column._id)
+      })
+      .catch(() => {})
+  }
+
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -129,12 +159,22 @@ function Column({ column, createNewCard }) {
               anchorEl={anchorEl}
               open={open}
               onClose={handleClose}
+              onClick={handleClose}
               MenuListProps={{
                 'aria-labelledby': 'basic-column-dropdown'
               }}>
-              <MenuItem>
+              <MenuItem
+                sx={{
+                  '&:hover': {
+                    color: 'success.light',
+                    '& .add-card-icon': {
+                      color: 'success.light'
+                    }
+                  }
+                }}
+                onClick={toggleOpenNewCardForm}>
                 <ListItemIcon>
-                  <AddCard fontSize="small" />
+                  <AddCard fontSize="small" className="add-card-icon" />
                 </ListItemIcon>
                 <ListItemText>Add new Card</ListItemText>
               </MenuItem>
@@ -157,9 +197,18 @@ function Column({ column, createNewCard }) {
                 <ListItemText>Paste</ListItemText>
               </MenuItem>
               <Divider />
-              <MenuItem>
+              <MenuItem
+                onClick={handleDeleteColumn}
+                sx={{
+                  '&:hover': {
+                    color: 'warning.dark',
+                    '& .delete-forever-icon': {
+                      color: 'warning.dark'
+                    }
+                  }
+                }}>
                 <ListItemIcon>
-                  <DeleteForever fontSize="small" />
+                  <DeleteForever fontSize="small" className="delete-forever-icon" />
                 </ListItemIcon>
                 <ListItemText>Remove this column</ListItemText>
               </MenuItem>
