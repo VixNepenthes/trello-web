@@ -11,7 +11,7 @@ import Close from '@mui/icons-material/Close'
 
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
 // import theme from '~/theme'
-function ListColumns({ columns, createNewColumn, createNewCard }) {
+function ListColumns({ columns, createNewColumn, createNewCard, deleteColumnDetails }) {
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
   const toggleOpenNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
 
@@ -30,7 +30,7 @@ function ListColumns({ columns, createNewColumn, createNewCard }) {
 
     // advance: using redux to bring data Board out to redux global store
 
-    await createNewColumn(newColumnData)
+    createNewColumn(newColumnData)
 
     toggleOpenNewColumnForm()
     setNewColumnTitle('')
@@ -51,7 +51,12 @@ function ListColumns({ columns, createNewColumn, createNewCard }) {
           }
         }}>
         {columns?.map((column) => (
-          <Column column={column} key={column._id} createNewCard={createNewCard} />
+          <Column
+            column={column}
+            key={column._id}
+            createNewCard={createNewCard}
+            deleteColumnDetails={deleteColumnDetails}
+          />
         ))}
         {/* Column 1 */}
         {/* <Column /> */}

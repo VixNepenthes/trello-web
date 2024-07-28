@@ -8,10 +8,30 @@ import theme from './theme.jsx'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
+// Cấu hình MUI dialog
+import { ConfirmProvider } from 'material-ui-confirm'
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <CssVarsProvider theme={theme}>
-    <CssBaseline />
-    <App />
-    <ToastContainer position="bottom-left" theme="colored" />
+    <ConfirmProvider
+      defaultOptions={{
+        buttonOrder: ['confirm', 'cancel'],
+
+        allowClose: false,
+        dialogProps: {
+          maxWidth: 'xs'
+        },
+        confirmationButtonProps: {
+          color: 'secondary',
+          variant: 'outlined'
+        },
+        cancellationButtonProps: {
+          color: 'inherit'
+        }
+      }}>
+      <CssBaseline />
+      <App />
+      <ToastContainer position="bottom-left" theme="colored" />
+    </ConfirmProvider>
   </CssVarsProvider>
 )
