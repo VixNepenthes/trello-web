@@ -26,15 +26,7 @@ const ACTIVE_DRAP_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAP_ITEM_TYPE_CARD'
 }
 
-function BoardContent({
-  board,
-  createNewColumn,
-  createNewCard,
-  moveColumn,
-  moveCardInTheSameColumn,
-  moveCardToDifferentColumn,
-  deleteColumnDetails
-}) {
+function BoardContent({ board, moveColumn, moveCardInTheSameColumn, moveCardToDifferentColumn }) {
   // https://docs.dndkit.com/api-documentation/sensors
   // Yêu cầu chuột di chuyển 10px mới kích hoạt event kéo thả
   // const pointerSensor = useSensor(PointerSensor, {
@@ -378,12 +370,7 @@ function BoardContent({
           },
           p: '10px 0'
         }}>
-        <ListColumns
-          columns={orderedColumns}
-          createNewCard={createNewCard}
-          createNewColumn={createNewColumn}
-          deleteColumnDetails={deleteColumnDetails}
-        />
+        <ListColumns columns={orderedColumns} />
         <DragOverlay dropAnimation={customDropAnimation}>
           {(!activeDragItemId || !activeDragItemType) && null}
           {activeDragItemId && activeDragItemType === ACTIVE_DRAP_ITEM_TYPE.COLUMN && (

@@ -10,12 +10,23 @@ import TextField from '@mui/material/TextField'
 import Close from '@mui/icons-material/Close'
 
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
+import { createNewColumnAPI } from '~/apis'
+import { generatePlacehoderCard } from '~/utils/formatters'
+import { cloneDeep } from 'lodash'
+import {
+  updateCurrentActiveBoard,
+  selectCurrentActiveBoard
+} from '~/redux/activeBoard/activeBoardSlice'
+import { useDispatch, useSelector } from 'react-redux'
+
 // import theme from '~/theme'
-function ListColumns({ columns, createNewColumn, createNewCard, deleteColumnDetails }) {
+function ListColumns({ columns }) {
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
   const toggleOpenNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
-
   const [newColumnTitle, setNewColumnTitle] = useState('')
+
+  const dispatch = useDispatch()
+  const board = useSelector(selectCurrentActiveBoard)
 
   const addNewColumn = async () => {
     if (!newColumnTitle) {
@@ -28,9 +39,21 @@ function ListColumns({ columns, createNewColumn, createNewCard, deleteColumnDeta
       title: newColumnTitle
     }
 
-    // advance: using redux to bring data Board out to redux global store
+    const createdColumn = await createNewColumnAPI({
+      ...newColumnData,
+      boardId: board._id
+    })
 
-    createNewColumn(newColumnData)
+    // Khi tạo column mới thì nó chưa có card, cần thêm placeholderCard rỗng để có thể kéo thả vào
+
+    createdColumn.cards = [generatePlacehoderCard(createdColumn)]
+    createdColumn.cardOrderIds = [generatePlacehoderCard(createdColumn)._id]
+
+    // Cập nhật state board
+    const newBoard = cloneDeep(board)
+    newBoard.columns.push(createdColumn)
+    newBoard.columnOrderIds.push(createdColumn._id)
+    dispatch(updateCurrentActiveBoard(newBoard))
 
     toggleOpenNewColumnForm()
     setNewColumnTitle('')
@@ -51,12 +74,7 @@ function ListColumns({ columns, createNewColumn, createNewCard, deleteColumnDeta
           }
         }}>
         {columns?.map((column) => (
-          <Column
-            column={column}
-            key={column._id}
-            createNewCard={createNewCard}
-            deleteColumnDetails={deleteColumnDetails}
-          />
+          <Column column={column} key={column._id} />
         ))}
         {/* Column 1 */}
         {/* <Column /> */}

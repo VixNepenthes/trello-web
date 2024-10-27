@@ -25,7 +25,14 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { toast } from 'react-toastify'
 import { useConfirm } from 'material-ui-confirm'
-function Column({ column, createNewCard, deleteColumnDetails }) {
+import { createNewCardAPI, deleteColumnDetailsAPI } from '~/apis'
+import { cloneDeep } from 'lodash'
+import {
+  updateCurrentActiveBoard,
+  selectCurrentActiveBoard
+} from '~/redux/activeBoard/activeBoardSlice'
+import { useDispatch, useSelector } from 'react-redux'
+function Column({ column }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column?._id,
     data: { ...column }
@@ -51,6 +58,9 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
 
   const [newCardTitle, setNewCardTitle] = useState('')
 
+  const dispatch = useDispatch()
+  const board = useSelector(selectCurrentActiveBoard)
+
   const addNewCard = async () => {
     if (!newCardTitle) {
       toast.error('Please enter Card title', { position: 'bottom-right' })
@@ -64,8 +74,24 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
     // Sau này sẽ sử dụng redux global store để đưa dữ liệu board ra ngoài và có thể gọi trực tiếp
     // api
 
-    createNewCard(newCardData)
-
+    const createdCard = await createNewCardAPI({
+      ...newCardData,
+      boardId: board._id
+    })
+    const newBoard = cloneDeep(board)
+    const columnToUpdate = newBoard.columns.find((column) => column._id === createdCard.columnId)
+    if (columnToUpdate) {
+      // Nếu column rỗng => gán mảng cards bằng mảng có 1 phần tử card vừa tạo
+      // Nếu column đã có phần tử => push
+      if (columnToUpdate.cards.some((card) => card.FE_PlaceholderCard)) {
+        columnToUpdate.cards = [createdCard]
+        columnToUpdate.cardOrderIds = [createdCard._id]
+      } else {
+        columnToUpdate.cards.push(createdCard)
+        columnToUpdate.cardOrderIds.push(createdCard._id)
+      }
+    }
+    dispatch(updateCurrentActiveBoard(newBoard))
     toggleOpenNewCardForm()
     setNewCardTitle('')
   }
@@ -93,7 +119,16 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
     })
       .then(() => {
         //advance: redux
-        deleteColumnDetails(column._id)
+        // Update data state Board
+        const newBoard = { ...board }
+        newBoard.columns = newBoard.columns.filter((column) => column._id !== column._id)
+        newBoard.columnOrderIds = newBoard.columnOrderIds.filter((_id) => _id !== column._id)
+        dispatch(updateCurrentActiveBoard(newBoard))
+
+        // Gọi api xử lý phía BE
+        deleteColumnDetailsAPI(column._id).then((res) => {
+          toast.success(res?.deleteResult)
+        })
       })
       .catch(() => {})
   }
