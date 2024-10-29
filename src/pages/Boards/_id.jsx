@@ -4,7 +4,7 @@ import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 import { useEffect } from 'react'
 import { updateBoardDetailsAPI, updateColumnDetailsAPI, moveCardToDifferentColumnAPI } from '~/apis'
-import { Box, CircularProgress, Typography } from '@mui/material'
+import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner'
 import {
   fetchBoardDetailsAPI,
   updateCurrentActiveBoard,
@@ -29,7 +29,6 @@ function Board() {
   }, [dispatch, boardId])
   // gọi API tạo mới column và làm mới dữ liệu state board
 
-  // Có nhiệm vụ gọi API cập nhật mảng columnOrderIds của board chứa nó. (advance: sử dụng redux)
   const moveColumn = (dndOrderedColumns) => {
     // Update data state board full
     const dndOrderedColumnsIds = dndOrderedColumns.map((column) => column._id)
@@ -90,20 +89,7 @@ function Board() {
   }
 
   if (!board) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 2,
-          width: '100vw',
-          height: '100vh'
-        }}>
-        <CircularProgress />
-        <Typography>Loading Board...</Typography>
-      </Box>
-    )
+    return <PageLoadingSpinner caption="Loading board..." />
   }
 
   return (
