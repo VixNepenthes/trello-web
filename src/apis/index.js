@@ -3,19 +3,19 @@ import authorizedAxiosInstance from '~/utils/authorizedAxios'
 import { API_ROOT } from '~/utils/constants'
 
 // Board
-export const fetchBoardDetailsAPI = async (boardId) => {
+export async function fetchBoardDetailsAPI(boardId) {
   const response = await authorizedAxiosInstance.get(`${API_ROOT}/v1/boards/${boardId}`)
   //   Axios will return result through its property: data
   return response.data
 }
 
-export const updateBoardDetailsAPI = async (boardId, updateData) => {
+export async function updateBoardDetailsAPI(boardId, updateData) {
   const response = await authorizedAxiosInstance.put(`${API_ROOT}/v1/boards/${boardId}`, updateData)
   //   Axios will return result through its property: data
   return response.data
 }
 
-export const moveCardToDifferentColumnAPI = async (updateData) => {
+export async function moveCardToDifferentColumnAPI(updateData) {
   const response = await authorizedAxiosInstance.put(
     `${API_ROOT}/v1/boards/supports/moving_card`,
     updateData
@@ -25,13 +25,13 @@ export const moveCardToDifferentColumnAPI = async (updateData) => {
 }
 
 // Column
-export const createNewColumnAPI = async (newColumnData) => {
+export async function createNewColumnAPI(newColumnData) {
   const response = await authorizedAxiosInstance.post(`${API_ROOT}/v1/columns`, newColumnData)
   //   Axios will return result through its property: data
   return response.data
 }
 
-export const updateColumnDetailsAPI = async (columnId, updateData) => {
+export async function updateColumnDetailsAPI(columnId, updateData) {
   const response = await authorizedAxiosInstance.put(
     `${API_ROOT}/v1/columns/${columnId}`,
     updateData
@@ -40,31 +40,33 @@ export const updateColumnDetailsAPI = async (columnId, updateData) => {
   return response.data
 }
 
-export const deleteColumnDetailsAPI = async (columnId) => {
+export async function deleteColumnDetailsAPI(columnId) {
   const response = await authorizedAxiosInstance.delete(`${API_ROOT}/v1/columns/${columnId}`)
   //   Axios will return result through its property: data
   return response.data
 }
 
 // Card
-export const createNewCardAPI = async (newCardData) => {
+export async function createNewCardAPI(newCardData) {
   const response = await authorizedAxiosInstance.post(`${API_ROOT}/v1/cards`, newCardData)
   //   Axios will return result through its property: data
   return response.data
 }
 
-export const registerUserAPI = async (newUserData) => {
+export async function registerUserAPI(newUserData) {
   const response = await authorizedAxiosInstance.post(`${API_ROOT}/v1/users/register`, newUserData)
-  toast.success('Register successfully! Please check your email to verify account.', {
-    theme: 'colored'
-  })
   //   Axios will return result through its property: data
   return response.data
 }
 
-export const verifyUserAPI = async (verifyData) => {
+export async function verifyUserAPI(verifyData) {
   const response = await authorizedAxiosInstance.put(`${API_ROOT}/v1/users/verify`, verifyData)
   toast.success('Verify successfully! Please login to continue.', { theme: 'colored' })
   //   Axios will return result through its property: data
+  return response.data
+}
+
+export async function refreshTokenAPI() {
+  const response = await authorizedAxiosInstance.get(`${API_ROOT}/v1/users/refresh_token`)
   return response.data
 }
