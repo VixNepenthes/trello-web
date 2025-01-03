@@ -29,47 +29,36 @@ import { createNewCardAPI, deleteColumnDetailsAPI } from '~/apis'
 import { cloneDeep } from 'lodash'
 import { updateCurrentActiveBoard, selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
 function Column({ column }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column?._id,
     data: { ...column }
   })
   const dndKitColumnStyles = {
-    // touchAction: 'none', //  Dành cho sensor default dạng PointerSensor
-    // Nếu sử dụng CSS.Transform như docs dnd-kit sẽ lỗi kiểu bị kéo dài component
     transform: CSS.Translate.toString(transform),
     transition,
-    //chiều cao phải luôn max 100% vì nếu không sẽ lỗi
-    // lúc kéo column ngắn qua column dài thì phải kéo
-    // ở khu vực giữa khó chịu. lưu ý lúc này kết hợp
-    //với {...listeners} nằm ở Box chứ không phải ở
-    //div ngoài cùng để tránh trường hợp kéo vào vùng xanh
     height: '100%',
     opacity: isDragging ? 0.5 : undefined
   }
-  // Cards đã được sắp xếp ở comp mẹ cao nhất
   const orderedCards = column.cards
 
   const [openNewCardForm, setOpenNewCardForm] = useState(false)
-  const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
-
   const [newCardTitle, setNewCardTitle] = useState('')
-
+  function toggleOpenNewCardForm() {
+    setOpenNewCardForm(!openNewCardForm)
+  }
   const dispatch = useDispatch()
   const board = useSelector(selectCurrentActiveBoard)
 
-  const addNewCard = async () => {
+  async function addNewCard() {
     if (!newCardTitle) {
       toast.error('Please enter Card title', { position: 'bottom-right' })
     }
-
     const newCardData = {
       title: newCardTitle,
       columnId: column._id
     }
-    // Gọi lên prop function createNewCard nằm ở component mẹ cao nhất
-    // Sau này sẽ sử dụng redux global store để đưa dữ liệu board ra ngoài và có thể gọi trực tiếp
-    // api
 
     const createdCard = await createNewCardAPI({
       ...newCardData,
@@ -78,8 +67,6 @@ function Column({ column }) {
     const newBoard = cloneDeep(board)
     const columnToUpdate = newBoard.columns.find((column) => column._id === createdCard.columnId)
     if (columnToUpdate) {
-      // Nếu column rỗng => gán mảng cards bằng mảng có 1 phần tử card vừa tạo
-      // Nếu column đã có phần tử => push
       if (columnToUpdate.cards.some((card) => card.FE_PlaceholderCard)) {
         columnToUpdate.cards = [createdCard]
         columnToUpdate.cardOrderIds = [createdCard._id]
@@ -94,7 +81,7 @@ function Column({ column }) {
   }
 
   const confirmDeleteColumn = useConfirm()
-  const handleDeleteColumn = () => {
+  function handleDeleteColumn() {
     confirmDeleteColumn({
       title: 'Delete column',
       description: 'This action will permanently delete your column and its cards. Confirm ?',
@@ -115,20 +102,19 @@ function Column({ column }) {
       // confirmationKeyword: 'videv'
     })
       .then(() => {
-        //advance: redux
-        // Update data state Board
         const newBoard = { ...board }
         newBoard.columns = newBoard.columns.filter((columnItem) => columnItem._id !== column._id)
         newBoard.columnOrderIds = newBoard.columnOrderIds.filter((_id) => _id !== column._id)
         dispatch(updateCurrentActiveBoard(newBoard))
 
-        // Gọi api xử lý phía BE
         deleteColumnDetailsAPI(column._id).then((res) => {
           toast.success(res?.deleteResult)
         })
       })
       .catch(() => {})
   }
+
+  function onUpdateColumnTitle() {}
 
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
@@ -147,7 +133,7 @@ function Column({ column }) {
           minWidth: '300px',
           maxWidth: '300px',
           bgcolor: (theme) => {
-            return theme.palette.mode === 'dark' ? '#333643' : '#ebecf0'
+            return theme.palette.mode === 'dark' ? '#333643' : theme.palette.primary[50]
           },
           ml: 2,
           borderRadius: '6px',
@@ -163,15 +149,7 @@ function Column({ column }) {
             alignItems: 'center',
             justifyContent: 'space-between'
           }}>
-          <Typography
-            variant="h6"
-            sx={{
-              fontSize: '1rem',
-              fontWeight: 'bold',
-              cursor: 'pointer'
-            }}>
-            {column?.title}
-          </Typography>
+          <ToggleFocusInput value={column?.title} onChangedValue={onUpdateColumnTitle} data-no-dnd="true" />
           <Box>
             <Tooltip title="More Options">
               <ExpandMore

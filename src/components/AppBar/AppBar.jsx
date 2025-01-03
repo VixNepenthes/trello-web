@@ -37,7 +37,7 @@ function AppBar() {
         paddingX: 2,
         overflowX: 'auto',
         bgcolor: (theme) => {
-          return theme.palette.mode === 'dark' ? '#2c3e50' : '#1565c0'
+          return theme.palette.mode === 'dark' ? '#2c3e50' : theme.palette.primary[800]
         }
       }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -81,7 +81,7 @@ function AppBar() {
             ),
             endAdornment: (
               <InputAdornment position="end">
-                <Close onClick={() => setSearchValue('')} fontSize="small" sx={{ color: searchValue ? 'white' : 'transparent', cursor: 'pointer' }} />/
+                <Close onClick={() => setSearchValue('')} fontSize="small" sx={{ color: searchValue ? 'white' : 'transparent', cursor: 'pointer' }} />
               </InputAdornment>
             )
           }}
