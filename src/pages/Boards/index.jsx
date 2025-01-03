@@ -47,12 +47,18 @@ function Boards() {
   const query = new URLSearchParams(location.search)
   const page = parseInt(query.get('page') || '1', 10)
 
+  function updateStateBoard(result) {
+    setBoards(result?.boards || [])
+    setTotalBoards(result?.totalBoards || 0)
+  }
+
   useEffect(() => {
-    fetchBoardsAPI(location.search).then((result) => {
-      setBoards(result?.boards || [])
-      setTotalBoards(result?.totalBoards || 0)
-    })
+    fetchBoardsAPI(location.search).then(updateStateBoard)
   }, [location.search])
+
+  function afterCreateNewBoard() {
+    fetchBoardsAPI(location.search).then(updateStateBoard)
+  }
 
   if (!boards) {
     return <PageLoadingSpinner caption="Loading Boards..." />
@@ -80,7 +86,7 @@ function Boards() {
             </Stack>
             <Divider sx={{ my: 1 }} />
             <Stack direction="column" spacing={1}>
-              <SidebarCreateBoardModal />
+              <SidebarCreateBoardModal afterCreateNewBoard={afterCreateNewBoard} />
             </Stack>
           </Grid>
 

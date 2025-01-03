@@ -54,7 +54,7 @@ authorizedAxiosInstance.interceptors.response.use(
             refreshTokenPromise = null
           })
       }
-      return refreshTokenPromise.then((accessToken) => {
+      return refreshTokenPromise.then(() => {
         // Call API again with new token
         return authorizedAxiosInstance(originalRequest)
       })

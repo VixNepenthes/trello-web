@@ -15,8 +15,10 @@ import Button from '@mui/material/Button'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
-
 import { styled } from '@mui/material/styles'
+import { createNewBoardAPI } from '~/apis'
+import { toast } from 'react-toastify'
+
 const SidebarItem = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -44,23 +46,32 @@ const BOARD_TYPES = {
  * Bản chất của cái component SidebarCreateBoardModal này chúng ta sẽ trả về một cái SidebarItem để hiển thị ở màn Board List cho phù hợp giao diện bên đó, đồng thời nó cũng chứa thêm một cái Modal để xử lý riêng form create board nhé.
  * Note: Modal là một low-component mà bọn MUI sử dụng bên trong những thứ như Dialog, Drawer, Menu, Popover. Ở đây dĩ nhiên chúng ta có thể sử dụng Dialog cũng không thành vấn đề gì, nhưng sẽ sử dụng Modal để dễ linh hoạt tùy biến giao diện từ con số 0 cho phù hợp với mọi nhu cầu nhé.
  */
-function SidebarCreateBoardModal() {
-  const { control, register, handleSubmit, reset, formState: { errors } } = useForm()
+function SidebarCreateBoardModal({ afterCreateNewBoard }) {
+  const {
+    control,
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm()
 
   const [isOpen, setIsOpen] = useState(false)
   const handleOpenModal = () => setIsOpen(true)
   const handleCloseModal = () => {
     setIsOpen(false)
-    // Reset lại toàn bộ form khi đóng Modal
     reset()
   }
 
-
-  const submitCreateNewBoard = (data) => {
-    const { title, description, type } = data
-    console.log('Board title: ', title)
-    console.log('Board description: ', description)
-    console.log('Board type: ', type)
+  function submitCreateNewBoard(data) {
+    toast
+      .promise(createNewBoardAPI(data), {
+        pending: 'Creating new board...'
+      })
+      .then(() => {
+        toast.success('Create new board successfully!', { theme: 'colored' })
+        handleCloseModal()
+        afterCreateNewBoard()
+      })
   }
 
   // <>...</> nhắc lại cho bạn anof chưa biết hoặc quên nhé: nó là React Fragment, dùng để bọc các phần tử lại mà không cần chỉ định DOM Node cụ thể nào cả.
@@ -73,38 +84,39 @@ function SidebarCreateBoardModal() {
 
       <Modal
         open={isOpen}
-        // onClose={handleCloseModal} // chỉ sử dụng onClose trong trường hợp muốn đóng Modal bằng nút ESC hoặc click ra ngoài Modal
+        // onClose={handleCloseModal} // using onClose when click outside the modal or press ESC key
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 600,
-          bgcolor: 'white',
-          boxShadow: 24,
-          borderRadius: '8px',
-          border: 'none',
-          outline: 0,
-          padding: '20px 30px',
-          backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#1A2027' : 'white'
-        }}>
-          <Box sx={{
+        aria-describedby="modal-modal-description">
+        <Box
+          sx={{
             position: 'absolute',
-            top: '10px',
-            right: '10px',
-            cursor: 'pointer'
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 600,
+            bgcolor: 'white',
+            boxShadow: 24,
+            borderRadius: '8px',
+            border: 'none',
+            outline: 0,
+            padding: '20px 30px',
+            backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#1A2027' : 'white')
           }}>
-            <CancelIcon
-              color="error"
-              sx={{ '&:hover': { color: 'error.light' } }}
-              onClick={handleCloseModal} />
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              cursor: 'pointer'
+            }}>
+            <CancelIcon color="error" sx={{ '&:hover': { color: 'error.light' } }} onClick={handleCloseModal} />
           </Box>
           <Box id="modal-modal-title" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <LibraryAddIcon />
-            <Typography variant="h6" component="h2"> Create a new board</Typography>
+            <Typography variant="h6" component="h2">
+              {' '}
+              Create a new board
+            </Typography>
           </Box>
           <Box id="modal-modal-description" sx={{ my: 2 }}>
             <form onSubmit={handleSubmit(submitCreateNewBoard)}>
@@ -157,44 +169,24 @@ function SidebarCreateBoardModal() {
                 </Box>
 
                 {/*
-                  * Lưu ý đối với RadioGroup của MUI thì không thể dùng register tương tự TextField được mà phải sử dụng <Controller /> và props "control" của react-hook-form như cách làm dưới đây
-                  * https://stackoverflow.com/a/73336101
-                  * https://mui.com/material-ui/react-radio-button/
-                */}
+                 * Lưu ý đối với RadioGroup của MUI thì không thể dùng register tương tự TextField được mà phải sử dụng <Controller /> và props "control" của react-hook-form như cách làm dưới đây
+                 * https://stackoverflow.com/a/73336101
+                 * https://mui.com/material-ui/react-radio-button/
+                 */}
                 <Controller
                   name="type"
                   defaultValue={BOARD_TYPES.PUBLIC}
                   control={control}
                   render={({ field }) => (
-                    <RadioGroup
-                      {...field}
-                      row
-                      onChange={(event, value) => field.onChange(value)}
-                      value={field.value}
-                    >
-                      <FormControlLabel
-                        value={BOARD_TYPES.PUBLIC}
-                        control={<Radio size="small" />}
-                        label="Public"
-                        labelPlacement="start"
-                      />
-                      <FormControlLabel
-                        value={BOARD_TYPES.PRIVATE}
-                        control={<Radio size="small" />}
-                        label="Private"
-                        labelPlacement="start"
-                      />
+                    <RadioGroup {...field} row onChange={(event, value) => field.onChange(value)} value={field.value}>
+                      <FormControlLabel value={BOARD_TYPES.PUBLIC} control={<Radio size="small" />} label="Public" labelPlacement="start" />
+                      <FormControlLabel value={BOARD_TYPES.PRIVATE} control={<Radio size="small" />} label="Private" labelPlacement="start" />
                     </RadioGroup>
                   )}
                 />
 
                 <Box sx={{ alignSelf: 'flex-end' }}>
-                  <Button
-                    className="interceptor-loading"
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                  >
+                  <Button className="interceptor-loading" type="submit" variant="contained" color="primary">
                     Create
                   </Button>
                 </Box>
