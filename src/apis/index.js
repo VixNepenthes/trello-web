@@ -16,10 +16,7 @@ export async function updateBoardDetailsAPI(boardId, updateData) {
 }
 
 export async function moveCardToDifferentColumnAPI(updateData) {
-  const response = await authorizedAxiosInstance.put(
-    `${API_ROOT}/v1/boards/supports/moving_card`,
-    updateData
-  )
+  const response = await authorizedAxiosInstance.put(`${API_ROOT}/v1/boards/supports/moving_card`, updateData)
   //   Axios will return result through its property: data
   return response.data
 }
@@ -32,10 +29,7 @@ export async function createNewColumnAPI(newColumnData) {
 }
 
 export async function updateColumnDetailsAPI(columnId, updateData) {
-  const response = await authorizedAxiosInstance.put(
-    `${API_ROOT}/v1/columns/${columnId}`,
-    updateData
-  )
+  const response = await authorizedAxiosInstance.put(`${API_ROOT}/v1/columns/${columnId}`, updateData)
   //   Axios will return result through its property: data
   return response.data
 }
@@ -67,6 +61,6 @@ export async function verifyUserAPI(verifyData) {
 }
 
 export async function refreshTokenAPI() {
-  const response = await authorizedAxiosInstance.get(`${API_ROOT}/v1/users/refresh_token`)
+  const response = await authorizedAxiosInstance.get(`${API_ROOT}/v1/users/refresh-token`)
   return response.data
 }

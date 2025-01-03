@@ -15,6 +15,7 @@ import avatar from '~/assets/270236317_2954352121449240_2744543041549082339_n-mo
 import { useSelector, useDispatch } from 'react-redux'
 import { logoutUserAPI, selectCurrentUser } from '~/redux/user/userSlice'
 import { useConfirm } from 'material-ui-confirm'
+import { Link } from 'react-router-dom'
 function Profile() {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
@@ -44,13 +45,7 @@ function Profile() {
   return (
     <Box>
       <Tooltip title="Account settings">
-        <IconButton
-          onClick={handleClick}
-          size="small"
-          sx={{ padding: 0 }}
-          aria-controls={open ? 'basic-menu-profiles' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}>
+        <IconButton onClick={handleClick} size="small" sx={{ padding: 0 }} aria-controls={open ? 'basic-menu-profiles' : undefined} aria-haspopup="true" aria-expanded={open ? 'true' : undefined}>
           <Avatar sx={{ width: 30, height: 30 }} src={currentUser?.avatar} alt="TienViDev"></Avatar>
         </IconButton>
       </Tooltip>
@@ -64,15 +59,12 @@ function Profile() {
         MenuListProps={{
           'aria-labelledby': 'basic-button-profiles'
         }}>
-        <MenuItem
-          sx={{
-            '&:hover': {
-              color: 'success.light'
-            }
-          }}>
-          <Avatar sx={{ width: 34, height: 34, mr: 2 }} src={currentUser?.avatar} alt="TienViDev" />
-          Profile
-        </MenuItem>
+        <Link to={'/settings/account'} style={{ color: 'inherit' }}>
+          <MenuItem sx={{ '&:hover': { color: 'success.light' } }}>
+            <Avatar sx={{ width: 34, height: 34, mr: 2 }} src={currentUser?.avatar} alt="TienViDev" />
+            Profile
+          </MenuItem>
+        </Link>
         <Divider />
         <MenuItem>
           <ListItemIcon>

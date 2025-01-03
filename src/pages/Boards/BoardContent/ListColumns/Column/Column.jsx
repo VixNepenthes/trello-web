@@ -27,10 +27,7 @@ import { toast } from 'react-toastify'
 import { useConfirm } from 'material-ui-confirm'
 import { createNewCardAPI, deleteColumnDetailsAPI } from '~/apis'
 import { cloneDeep } from 'lodash'
-import {
-  updateCurrentActiveBoard,
-  selectCurrentActiveBoard
-} from '~/redux/activeBoard/activeBoardSlice'
+import { updateCurrentActiveBoard, selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
 import { useDispatch, useSelector } from 'react-redux'
 function Column({ column }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -121,7 +118,7 @@ function Column({ column }) {
         //advance: redux
         // Update data state Board
         const newBoard = { ...board }
-        newBoard.columns = newBoard.columns.filter((column) => column._id !== column._id)
+        newBoard.columns = newBoard.columns.filter((columnItem) => columnItem._id !== column._id)
         newBoard.columnOrderIds = newBoard.columnOrderIds.filter((_id) => _id !== column._id)
         dispatch(updateCurrentActiveBoard(newBoard))
 

@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import { CssBaseline, Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material'
+import GlobalStyles from '@mui/material/GlobalStyles'
 import theme from './theme.jsx'
 
 // Cấu hình react-toastify
@@ -43,6 +44,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                 color: 'inherit'
               }
             }}>
+            <GlobalStyles styles={{ a: { textDecoration: 'none' } }} />
             <CssBaseline />
             <App />
             <ToastContainer position="bottom-left" theme="colored" />

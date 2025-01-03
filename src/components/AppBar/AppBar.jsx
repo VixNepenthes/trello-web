@@ -20,7 +20,7 @@ import Recent from './Menus/Recent'
 import Started from './Menus/Started'
 import Templates from './Menus/Templates'
 import Profile from './Menus/Profile'
-
+import { Link } from 'react-router-dom'
 function AppBar() {
   const [searchValue, setSearchValue] = useState('')
   return (
@@ -34,30 +34,33 @@ function AppBar() {
         alignItems: 'center',
         justifyContent: 'space-between',
         gap: 2,
+        paddingX: 2,
         overflowX: 'auto',
         bgcolor: (theme) => {
           return theme.palette.mode === 'dark' ? '#2c3e50' : '#1565c0'
         }
       }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <AppsIcon sx={{ color: 'white' }} />
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-          <SvgIcon component={trelloLogo} inheritViewBox sx={{ color: 'white' }} />
-          <Typography
-            variant="span"
-            sx={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'white' }}>
-            Trello
-          </Typography>
-        </Box>
+        <Link to={'/boards'}>
+          <Tooltip title="Board List">
+            <AppsIcon sx={{ color: 'white', verticalAlign: 'middle' }} />
+          </Tooltip>
+        </Link>
+
+        <Link to={'/'}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <SvgIcon component={trelloLogo} inheritViewBox sx={{ color: 'white' }} />
+            <Typography variant="span" sx={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'white' }}>
+              Trello
+            </Typography>
+          </Box>
+        </Link>
         <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
           <Workspaces />
           <Recent />
           <Started />
           <Templates />
-          <Button
-            sx={{ color: 'white', border: 'none', '&:hover': { border: 'none' } }}
-            variant="outlined"
-            startIcon={<LibraryAdd />}>
+          <Button sx={{ color: 'white', border: 'none', '&:hover': { border: 'none' } }} variant="outlined" startIcon={<LibraryAdd />}>
             Create
           </Button>
         </Box>
@@ -78,12 +81,7 @@ function AppBar() {
             ),
             endAdornment: (
               <InputAdornment position="end">
-                <Close
-                  onClick={() => setSearchValue('')}
-                  fontSize="small"
-                  sx={{ color: searchValue ? 'white' : 'transparent', cursor: 'pointer' }}
-                />
-                /
+                <Close onClick={() => setSearchValue('')} fontSize="small" sx={{ color: searchValue ? 'white' : 'transparent', cursor: 'pointer' }} />/
               </InputAdornment>
             )
           }}
