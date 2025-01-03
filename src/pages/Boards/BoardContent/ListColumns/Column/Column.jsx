@@ -6,8 +6,6 @@ import ContentPaste from '@mui/icons-material/ContentPaste'
 import DeleteForever from '@mui/icons-material/DeleteForever'
 import Cloud from '@mui/icons-material/Cloud'
 import DragHandle from '@mui/icons-material/DragHandle'
-
-import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Tooltip from '@mui/material/Tooltip'
 import Menu from '@mui/material/Menu'
@@ -25,7 +23,7 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { toast } from 'react-toastify'
 import { useConfirm } from 'material-ui-confirm'
-import { createNewCardAPI, deleteColumnDetailsAPI } from '~/apis'
+import { createNewCardAPI, deleteColumnDetailsAPI, updateColumnDetailsAPI } from '~/apis'
 import { cloneDeep } from 'lodash'
 import { updateCurrentActiveBoard, selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
 import { useDispatch, useSelector } from 'react-redux'
@@ -114,7 +112,19 @@ function Column({ column }) {
       .catch(() => {})
   }
 
-  function onUpdateColumnTitle() {}
+  function onUpdateColumnTitle(newTitle) {
+    const newColumnData = {
+      title: newTitle
+    }
+    updateColumnDetailsAPI(column._id, newColumnData).then(() => {
+      const newBoard = cloneDeep(board)
+      const columnToUpdate = newBoard.columns.find((columnItem) => columnItem._id === column._id)
+      if (columnToUpdate) {
+        columnToUpdate.title = newTitle
+      }
+      dispatch(updateCurrentActiveBoard(newBoard))
+    })
+  }
 
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
@@ -140,7 +150,6 @@ function Column({ column }) {
           height: 'fit-content',
           maxHeight: (theme) => `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`
         }}>
-        {/* Column Header */}
         <Box
           sx={{
             height: (theme) => theme.trello.columnHeaderHeight,
@@ -231,10 +240,7 @@ function Column({ column }) {
             </Menu>
           </Box>
         </Box>
-        {/* Column Content */}
         <ListCards cards={orderedCards} />
-
-        {/* Column Footer */}
         <Box
           sx={{
             height: (theme) => theme.trello.columnFooterHeight,
@@ -286,8 +292,6 @@ function Column({ column }) {
                   value={newCardTitle}
                   onChange={(e) => setNewCardTitle(e.target.value)}
                   sx={{
-                    // minWidth: '120px',
-                    // maxwidth: '180px',
                     '& label': { color: 'text.primary' },
                     '& input': {
                       color: (theme) => theme.palette.primary.main,
