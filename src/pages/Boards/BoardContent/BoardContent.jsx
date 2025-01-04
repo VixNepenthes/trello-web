@@ -311,7 +311,7 @@ function BoardContent({ board, moveColumn, moveCardInTheSameColumn, moveCardToDi
           height: (theme) => theme.trello.boardContentHeight,
 
           bgcolor: (theme) => {
-            return theme.palette.mode === 'dark' ? '#34495e' : theme.palette.primary[300]
+            return theme.palette.mode === 'dark' ? '#34495e' : theme.palette.primary[500]
           },
           p: '10px 0'
         }}>

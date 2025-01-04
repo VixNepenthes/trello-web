@@ -36,7 +36,8 @@ function AppBar() {
         gap: 2,
         paddingX: 2,
         overflowX: 'auto',
-        bgcolor: (theme) => {
+        overflowY: 'hidden',
+        backgroundColor: (theme) => {
           return theme.palette.mode === 'dark' ? '#2c3e50' : theme.palette.primary[800]
         }
       }}>
@@ -86,8 +87,8 @@ function AppBar() {
             )
           }}
           sx={{
-            minWidth: '120px',
-            maxwidth: '180px',
+            // minWidth: '120px',
+            // maxwidth: '180px',
             '& label': { color: 'white' },
             '& input': { color: 'white' },
             '& label.Mui-focused': { color: 'white' },
