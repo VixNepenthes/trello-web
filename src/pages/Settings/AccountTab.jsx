@@ -48,19 +48,15 @@ function AccountTab() {
     })
   }
 
-  const uploadAvatar = (e) => {
-    // Lấy file thông qua e.target?.files[0] và validate nó trước khi xử lý
-    console.log('e.target?.files[0]: ', e.target?.files[0])
-    const error = singleFileValidator(e.target?.files[0])
+  function uploadAvatar(event) {
+    const error = singleFileValidator(event.target?.files[0])
     if (error) {
       toast.error(error)
       return
     }
 
-    // Sử dụng FormData để xử lý dữ liệu liên quan tới file khi gọi API
     let reqData = new FormData()
-    reqData.append('avatar', e.target?.files[0])
-    // Cách để log được dữ liệu thông qua FormData
+    reqData.append('avatar', event.target?.files[0])
     for (const value of reqData.values()) {
       console.log('reqData Value: ', value)
     }
@@ -69,7 +65,7 @@ function AccountTab() {
       if (!response.error) {
         toast.success('Updated successfully!')
       }
-      e.target.value = ''
+      event.target.value = ''
     })
   }
 

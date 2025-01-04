@@ -35,7 +35,9 @@ import CardActivitySection from './CardActivitySection'
 
 import { styled } from '@mui/material/styles'
 import { useDispatch, useSelector } from 'react-redux'
-import { clearCurrentActiveCard, selectCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
+import { clearCurrentActiveCard, selectCurrentActiveCard, updateCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
+import { updateCardDetailsAPI } from '~/apis'
+import { updateCardInBoard } from '~/redux/activeBoard/activeBoardSlice'
 const SidebarItem = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -64,9 +66,24 @@ function ActiveCard() {
     dispatch(clearCurrentActiveCard())
   }
 
+  async function callApiUpdateCard(updateData) {
+    try {
+      const updatedCard = await updateCardDetailsAPI(activeCard?._id, updateData)
+      dispatch(updateCurrentActiveCard(updatedCard))
+      dispatch(updateCardInBoard(updatedCard))
+
+      return updatedCard
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   function onUpdateCardTitle(newTitle) {
-    console.log(newTitle.trim())
-    // Gọi API...
+    callApiUpdateCard({ title: newTitle })
+  }
+
+  function onUpdateCardDescription(newDescription) {
+    callApiUpdateCard({ description: newDescription })
   }
 
   function onUploadCardCover(event) {
@@ -78,8 +95,12 @@ function ActiveCard() {
     }
     let reqData = new FormData()
     reqData.append('cardCover', event.target?.files[0])
-
-    // Gọi API...
+    toast.promise(callApiUpdateCard(reqData)).finally(
+      () => {
+        event.target.value = ''
+      },
+      { pending: 'Updating...' }
+    )
   }
 
   return (
@@ -139,7 +160,7 @@ function ActiveCard() {
               </Box>
 
               {/* Feature 03: Xử lý mô tả của Card */}
-              <CardDescriptionMdEditor />
+              <CardDescriptionMdEditor cardDescriptionProp={activeCard?.description} handleUpdateCardDescription={onUpdateCardDescription} />
             </Box>
 
             <Box sx={{ mb: 3 }}>

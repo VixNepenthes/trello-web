@@ -2,20 +2,17 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import authorizedAxiosInstance from '~/utils/authorizedAxios'
 import { API_ROOT } from '~/utils/constants'
 import { generatePlacehoderCard } from '~/utils/formatters'
-import { isEmpty } from 'lodash'
+import { isEmpty, update } from 'lodash'
 import { mapOder } from '~/utils/sorts'
 
 const initialState = {
   currentActiveBoard: null
 }
 
-export const fetchBoardDetailsAPI = createAsyncThunk(
-  'activeBoard/fetchBoardDetailsAPI',
-  async (boardId) => {
-    const response = await authorizedAxiosInstance.get(`${API_ROOT}/v1/boards/${boardId}`)
-    return response.data
-  }
-)
+export const fetchBoardDetailsAPI = createAsyncThunk('activeBoard/fetchBoardDetailsAPI', async (boardId) => {
+  const response = await authorizedAxiosInstance.get(`${API_ROOT}/v1/boards/${boardId}`)
+  return response.data
+})
 
 // Init slice in redux store
 const activeBoardSlice = createSlice({
@@ -26,6 +23,18 @@ const activeBoardSlice = createSlice({
       return {
         ...state,
         currentActiveBoard: action.payload
+      }
+    },
+    updateCardInBoard: (state, action) => {
+      const incomingCard = action.payload
+      const column = state.currentActiveBoard.columns.find((columnItem) => columnItem._id === incomingCard.columnId)
+      if (column) {
+        const card = column.cards.find((cardItem) => cardItem._id === incomingCard._id)
+        if (card) {
+          Object.keys(incomingCard).forEach((key) => {
+            card[key] = incomingCard[key]
+          })
+        }
       }
     }
   },
@@ -51,7 +60,7 @@ const activeBoardSlice = createSlice({
   }
 })
 
-export const { updateCurrentActiveBoard } = activeBoardSlice.actions
+export const { updateCurrentActiveBoard, updateCardInBoard } = activeBoardSlice.actions
 
 export function selectCurrentActiveBoard(state) {
   return state.activeBoard.currentActiveBoard
