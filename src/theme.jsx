@@ -1,5 +1,5 @@
 import { experimental_extendTheme as extendTheme } from '@mui/material'
-import { teal, deepOrange, cyan, orange } from '@mui/material/colors'
+import { teal, deepPurple, cyan, orange } from '@mui/material/colors'
 
 const APP_BAR_HEIGHT = '58px'
 const BOAR_BAR_HEIGHT = '60px'
@@ -83,7 +83,7 @@ const theme = extendTheme({
     light: {
       palette: {
         primary: teal,
-        secondary: deepOrange
+        secondary: deepPurple
       }
     },
     dark: {

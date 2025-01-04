@@ -4,16 +4,12 @@ import AddToDrive from '@mui/icons-material/AddToDrive'
 import Bolt from '@mui/icons-material/Bolt'
 import FilterList from '@mui/icons-material/FilterList'
 import PersonAdd from '@mui/icons-material/PersonAdd'
-
-import Avatar from '@mui/material/Avatar'
-import AvatarGroup from '@mui/material/AvatarGroup'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
 import Tooltip from '@mui/material/Tooltip'
-
-import avatar from '~/assets/270236317_2954352121449240_2744543041549082339_n-modified.png'
 import { capitalizeFirstLetter } from '~/utils/formatters'
+import BoardUserGroup from './BoardUserGroup'
 const MENU_STYLE = {
   color: 'white',
   bgcolor: 'transparent',
@@ -77,47 +73,7 @@ function BoardBar(props) {
           }}>
           Invite
         </Button>
-
-        <AvatarGroup
-          max={7}
-          sx={{
-            gap: '10px',
-            '& .MuiAvatar-root': {
-              width: 34,
-              height: 34,
-              fontSize: 16,
-              border: 'none',
-              color: 'white',
-              cursor: 'pointer',
-              '&:first-of-type': {
-                bgcolor: '#a4b0de'
-              }
-            }
-          }}>
-          <Tooltip title="Vix Dev">
-            <Avatar src={avatar} alt="TienViDev"></Avatar>
-          </Tooltip>
-          <Tooltip title="Vix Dev">
-            <Avatar src={avatar} alt="TienViDev"></Avatar>
-          </Tooltip>
-          <Tooltip title="Vix Dev">
-            <Avatar src={avatar} alt="TienViDev"></Avatar>
-          </Tooltip>
-          <Tooltip title="Vix Dev">
-            <Avatar src={avatar} alt="TienViDev"></Avatar>
-          </Tooltip>
-          <Tooltip title="Vix Dev">
-            <Avatar src={avatar} alt="TienViDev"></Avatar>
-          </Tooltip>
-          <Tooltip title="Vix Dev">
-            <Avatar src={avatar} alt="TienViDev"></Avatar>
-          </Tooltip>
-          <Tooltip title="Vix Dev">
-            <Avatar src={avatar} alt="TienViDev"></Avatar>
-          </Tooltip>
-
-          <Avatar src={avatar} alt="TienViDev"></Avatar>
-        </AvatarGroup>
+        <BoardUserGroup />
       </Box>
     </Box>
   )

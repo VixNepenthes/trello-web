@@ -24,15 +24,16 @@ const SidebarItem = styled(Box)(({ theme }) => ({
   alignItems: 'center',
   gap: '8px',
   cursor: 'pointer',
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : theme.palette.primary[50],
   padding: '12px 16px',
   borderRadius: '8px',
   '&:hover': {
-    backgroundColor: theme.palette.mode === 'dark' ? '#33485D' : theme.palette.grey[300]
+    color: theme.palette.mode === 'dark' ? '#90caf9' : '#fff',
+    backgroundColor: theme.palette.mode === 'dark' ? '#33485D' : theme.palette.primary[100]
   },
   '&.active': {
-    color: theme.palette.mode === 'dark' ? '#90caf9' : '#0c66e4',
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#e9f2ff'
+    color: theme.palette.mode === 'dark' ? '#90caf9' : '#fff',
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : theme.palette.primary[200]
   }
 }))
 
