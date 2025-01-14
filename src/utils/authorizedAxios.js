@@ -61,8 +61,8 @@ authorizedAxiosInstance.interceptors.response.use(
     }
 
     let errorMessage = error?.message
-    if (error?.response?.data) {
-      errorMessage = error.response?.data
+    if (error?.response?.data?.message) {
+      errorMessage = error.response?.data?.message
     }
 
     if (error?.response?.status !== 410) {

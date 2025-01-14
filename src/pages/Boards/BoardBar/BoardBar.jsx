@@ -10,6 +10,7 @@ import Chip from '@mui/material/Chip'
 import Tooltip from '@mui/material/Tooltip'
 import { capitalizeFirstLetter } from '~/utils/formatters'
 import BoardUserGroup from './BoardUserGroup'
+import InviteBoardUser from './InviteBoardUser'
 const MENU_STYLE = {
   color: 'white',
   bgcolor: 'transparent',
@@ -19,9 +20,9 @@ const MENU_STYLE = {
   '.MuiSvgIcon-root': {
     color: 'white'
   }
-  // '&:hover .MuiSvgIcon-root': {
-  //     bgcolor: 'transparent',
-  // },
+  //   '&:hover.MuiSvgIcon-root': {
+  //     bgcolor: 'primary.200'
+  //   }
 }
 
 function BoardBar(props) {
@@ -63,17 +64,8 @@ function BoardBar(props) {
           alignItems: 'center',
           gap: 2
         }}>
-        <Button
-          variant="outlined"
-          startIcon={<PersonAdd />}
-          sx={{
-            color: 'white',
-            borderColor: 'white',
-            '&:hover': { borderColor: 'white' }
-          }}>
-          Invite
-        </Button>
-        <BoardUserGroup />
+        <InviteBoardUser boardId={board?._id} />
+        <BoardUserGroup boardUsers={board?.allUsersInBoard} />
       </Box>
     </Box>
   )

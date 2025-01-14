@@ -11,22 +11,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { cloneDeep } from 'lodash'
 import { useParams } from 'react-router-dom'
 import ActiveCard from '~/components/Modal/ActiveCard/ActiveCard'
-import { selectCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
 
 function Board() {
   const dispatch = useDispatch()
   const board = useSelector(selectCurrentActiveBoard)
-  const activeCard = useSelector(selectCurrentActiveCard)
-  console.log('activeCard: ', activeCard)
   const { boardId } = useParams()
 
   useEffect(() => {
-    // Tạm thời fix cứng boardId, flow chuẩn sử dụng react-router-dom để lấy boardId từ URL về
-    // const boardId = '66a082dd33de8a5b604d8c53'
-    // Call Api
     dispatch(fetchBoardDetailsAPI(boardId))
   }, [dispatch, boardId])
-  // gọi API tạo mới column và làm mới dữ liệu state board
 
   function moveColumn(dndOrderedColumns) {
     // Update data state board full
@@ -41,8 +34,6 @@ function Board() {
   }
 
   function moveCardInTheSameColumn(dndOrderedCards, dndOrderedCardIds, columnId) {
-    // update data state board
-
     const newBoard = cloneDeep(board)
     const columnToUpdate = newBoard.columns.find((column) => column._id === columnId)
     if (columnToUpdate) {
@@ -88,7 +79,7 @@ function Board() {
 
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
-      {activeCard && <ActiveCard />}
+      <ActiveCard />
       <AppBar />
       <BoardBar board={board} />
       <BoardContent board={board} moveColumn={moveColumn} moveCardInTheSameColumn={moveCardInTheSameColumn} moveCardToDifferentColumn={moveCardToDifferentColumn} />

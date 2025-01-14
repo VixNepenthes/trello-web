@@ -10,7 +10,6 @@ import AppsIcon from '@mui/icons-material/Apps'
 import Close from '@mui/icons-material/Close'
 import HelpOutline from '@mui/icons-material/HelpOutline'
 import LibraryAdd from '@mui/icons-material/LibraryAdd'
-import NotificationsNone from '@mui/icons-material/NotificationsNone'
 import Search from '@mui/icons-material/Search'
 import { useState } from 'react'
 import ModeSelect from '~/components/ModeSelect/ModeSelect'
@@ -21,6 +20,7 @@ import Started from './Menus/Started'
 import Templates from './Menus/Templates'
 import Profile from './Menus/Profile'
 import { Link } from 'react-router-dom'
+import Notifications from './Notifications/Notifications'
 function AppBar() {
   const [searchValue, setSearchValue] = useState('')
   return (
@@ -38,7 +38,7 @@ function AppBar() {
         overflowX: 'auto',
         overflowY: 'hidden',
         backgroundColor: (theme) => {
-          return theme.palette.mode === 'dark' ? '#2c3e50' : theme.palette.primary[800]
+          return theme.palette.mode === 'dark' ? '#2c3e50' : theme.palette.primary[600]
         }
       }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -106,11 +106,7 @@ function AppBar() {
           }}
         />
         <ModeSelect />
-        <Tooltip title="Notification">
-          <Badge color="warning" variant="dot" sx={{ cursor: 'pointer' }}>
-            <NotificationsNone sx={{ color: 'white' }} />
-          </Badge>
-        </Tooltip>
+        <Notifications />
         <Tooltip title="Help">
           <HelpOutline sx={{ color: 'white', cursor: 'pointer' }} />
         </Tooltip>
