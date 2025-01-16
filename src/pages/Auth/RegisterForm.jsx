@@ -34,10 +34,14 @@ function RegisterForm() {
     const { email, password } = data
     toast
       .promise(registerUserAPI({ email, password }), {
-        pending: 'Registering...'
+        pending: 'Registering...',
+        error: 'Register failed'
       })
-      .then((user) => {
-        navigate(`/login?registeredEmail=${user.email}`)
+      .then((data) => {
+        toast.success('Register successfully! Please check your email to verify account.', {
+          theme: 'colored'
+        })
+        navigate(`/login?registeredEmail=${data?.email}`)
       })
   }
   return (
@@ -65,7 +69,7 @@ function RegisterForm() {
               justifyContent: 'center',
               color: (theme) => theme.palette.grey[500]
             }}>
-            Author: TrungQuanDev
+            Author: ViDev
           </Box>
           <Box sx={{ padding: '0 1em 1em 1em' }}>
             <Box sx={{ marginTop: '1em' }}>
