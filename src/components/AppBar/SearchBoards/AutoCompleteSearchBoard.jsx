@@ -5,7 +5,8 @@ import CircularProgress from '@mui/material/CircularProgress'
 import InputAdornment from '@mui/material/InputAdornment'
 import SearchIcon from '@mui/icons-material/Search'
 import { createSearchParams, useNavigate } from 'react-router-dom'
-
+import { fetchBoardsAPI } from '~/apis'
+import { useDebounceFn } from '~/customHooks/useDebounceFn'
 function AutoCompleteSearchBoard() {
   const navigate = useNavigate()
 
@@ -26,10 +27,23 @@ function AutoCompleteSearchBoard() {
 
     const searchPath = `?${createSearchParams({ 'q[title]': searchValue })}`
     console.log(searchPath)
+
+    setLoading(true)
+    fetchBoardsAPI(searchPath)
+      .then((response) => {
+        setBoards(response.boards || [])
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }
 
+  const debounceSearch = useDebounceFn(handleInputSearchChange, 1000)
+
   const handleSelectedBoard = (event, selectedBoard) => {
-    console.log(selectedBoard)
+    if (selectedBoard) {
+      navigate(`/boards/${selectedBoard._id}`)
+    }
   }
 
   return (
@@ -48,7 +62,7 @@ function AutoCompleteSearchBoard() {
       options={boards || []}
       isOptionEqualToValue={(option, value) => option._id === value._id}
       loading={loading}
-      onInputChange={handleInputSearchChange}
+      onInputChange={debounceSearch}
       onChange={handleSelectedBoard}
       renderInput={(params) => (
         <TextField
