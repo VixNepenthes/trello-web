@@ -94,7 +94,7 @@ function SidebarCreateBoardModal({ afterCreateNewBoard }) {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: 600,
+            width: { xs: '70%', sm: '80%', md: '600px' },
             bgcolor: 'white',
             boxShadow: 24,
             borderRadius: '8px',

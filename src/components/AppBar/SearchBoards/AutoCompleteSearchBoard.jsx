@@ -48,7 +48,7 @@ function AutoCompleteSearchBoard() {
 
   return (
     <Autocomplete
-      sx={{ width: 220 }}
+      sx={{ width: { xs: '100%', sm: 220 }, display: { xs: 'none', sm: 'flex' } }}
       id="asynchronous-search-board"
       noOptionsText={!boards ? 'Type to search board...' : 'No board found!'}
       open={open}

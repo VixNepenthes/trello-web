@@ -91,7 +91,7 @@ function Boards() {
             </Stack>
           </Grid>
 
-          <Grid component={Box} xs={12} sm={9}>
+          <Grid justifyContent={{ xs: 'center', sm: 'flex-start' }} xs={12} sm={9}>
             <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 3 }}>
               Your boards:
             </Typography>
