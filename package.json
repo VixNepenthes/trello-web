@@ -6,7 +6,7 @@
   "author": "Videv",
   "description": "",
   "engines": {
-    "node": "18.x"
+    "node": "20.x"
   },
   "scripts": {
     "dev": "cross-env BUILD_MODE=dev vite --host",

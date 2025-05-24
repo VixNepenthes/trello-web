@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 import Settings from './pages/Settings/Settings'
 import Boards from './pages/Boards'
+import Base from './pages/Base'
 
 const ProtectedRoute = ({ user }) => {
   if (!user) {
@@ -19,8 +20,9 @@ function App() {
   const currentUser = useSelector(selectCurrentUser)
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/boards" replace={true} />} />
+      <Route path="/" element={<Navigate to="/base" replace={true} />} />
       <Route element={<ProtectedRoute user={currentUser} />}>
+        <Route path="/base" element={<Base />} />
         <Route path="/boards/:boardId" element={<Board />} />
         <Route path="/boards" element={<Boards />} />
         <Route path="/settings/account" element={<Settings />} />
