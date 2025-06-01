@@ -8,7 +8,8 @@ import { selectCurrentUser } from '~/redux/user/userSlice'
 import Settings from './pages/Settings/Settings'
 import Boards from './pages/Boards'
 import Base from './pages/Base'
-
+import Dashboard from './pages/dashboard'
+import Classroom from './pages/Classroom'
 const ProtectedRoute = ({ user }) => {
   if (!user) {
     return <Navigate to="/login" replace={true} />
@@ -27,6 +28,13 @@ function App() {
         <Route path="/boards" element={<Boards />} />
         <Route path="/settings/account" element={<Settings />} />
         <Route path="/settings/security" element={<Settings />} />
+        <Route path="/tms" element={<Dashboard />}>
+          <Route path="classrooms" element={<Classroom />} />
+          <Route path="students" element={<Dashboard />} />
+          <Route path="teachers" element={<Dashboard />} />
+          <Route path="payments" element={<Dashboard />} />
+          <Route path="settings" element={<Dashboard />} />
+        </Route>
       </Route>
       <Route path="/login" element={<Auth />} />
       <Route path="/register" element={<Auth />} />

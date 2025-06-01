@@ -37,16 +37,11 @@ const SidebarItem = styled(Box)(({ theme }) => ({
   }
 }))
 
-// BOARD_TYPES tương tự bên model phía Back-end (nếu cần dùng nhiều nơi thì hãy đưa ra file constants, không thì cứ để ở đây)
 const BOARD_TYPES = {
   PUBLIC: 'public',
   PRIVATE: 'private'
 }
 
-/**
- * Bản chất của cái component SidebarCreateBoardModal này chúng ta sẽ trả về một cái SidebarItem để hiển thị ở màn Board List cho phù hợp giao diện bên đó, đồng thời nó cũng chứa thêm một cái Modal để xử lý riêng form create board nhé.
- * Note: Modal là một low-component mà bọn MUI sử dụng bên trong những thứ như Dialog, Drawer, Menu, Popover. Ở đây dĩ nhiên chúng ta có thể sử dụng Dialog cũng không thành vấn đề gì, nhưng sẽ sử dụng Modal để dễ linh hoạt tùy biến giao diện từ con số 0 cho phù hợp với mọi nhu cầu nhé.
- */
 function SidebarCreateBoardModal({ afterCreateNewBoard }) {
   const {
     control,
@@ -75,7 +70,6 @@ function SidebarCreateBoardModal({ afterCreateNewBoard }) {
       })
   }
 
-  // <>...</> nhắc lại cho bạn anof chưa biết hoặc quên nhé: nó là React Fragment, dùng để bọc các phần tử lại mà không cần chỉ định DOM Node cụ thể nào cả.
   return (
     <>
       <SidebarItem onClick={handleOpenModal}>
@@ -169,11 +163,6 @@ function SidebarCreateBoardModal({ afterCreateNewBoard }) {
                   <FieldErrorAlert errors={errors} fieldName={'description'} />
                 </Box>
 
-                {/*
-                 * Lưu ý đối với RadioGroup của MUI thì không thể dùng register tương tự TextField được mà phải sử dụng <Controller /> và props "control" của react-hook-form như cách làm dưới đây
-                 * https://stackoverflow.com/a/73336101
-                 * https://mui.com/material-ui/react-radio-button/
-                 */}
                 <Controller
                   name="type"
                   defaultValue={BOARD_TYPES.PUBLIC}
